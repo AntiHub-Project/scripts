@@ -11,15 +11,14 @@
 请找一台全新安装的服务器, 登录后克隆仓库: 
 
 ```bash
-git clone https://github.com/AntiHub-Project/scripts.git
-cd scripts
+git clone https://github.com/AntiHub-Project/scripts.git && cd scripts
 ```
 
 ### Linux.do 登录配置
 
 > 如果你反向代理配置了自己的域名, 那么下面的 `http://$SERVER_IP:$PORT` 都替换为你的域名.
 
-- 登录 [Linux.do Connect](https://connect.linux.do/dash/sso), 点击 `申请新接入` , 填入应用名, 应用主页 (http://$SERVER_IP:3000), 应用描述及回调地址 ( http://$SERVER_IP:3000/api/auth/sso/callback), 点击保存. 
+- 登录 [Linux.do Connect](https://connect.linux.do/dash/sso), 点击 `申请新接入` , 填入应用名, 应用主页 (http://$SERVER_IP:3000), 应用描述及回调地址 ( http://$SERVER_IP:3000/api/auth/callback), 点击保存. 
 
 - 得到一个 `Client Id` 和 `Client Secret` , 将这两个值填入 `config.yaml` 中的此处：
 ```yaml

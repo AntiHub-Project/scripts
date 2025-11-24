@@ -6,7 +6,7 @@ backend:
   # Linux.do OAuth
   oauth_client_id: your-oauth-client-id 
   oauth_client_secret: your-oauth-client-secret
-  oauth_redirect_uri: http://localhost:3000/api/auth/sso/callback # 生产环境请将 http://localhost:3000 替换为你的前端域名
+  oauth_redirect_uri: http://localhost:3000/api/auth/callback # 生产环境请将 http://localhost:3000 替换为你的前端域名
   
   # GitHub OAuth
   github_client_id: your-github-client-id

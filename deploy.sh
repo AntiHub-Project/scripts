@@ -289,9 +289,13 @@ NEXT_PUBLIC_API_URL=$FRONTEND_API_URL
 NEXT_PUBLIC_FRONTEND_URL=$FRONTEND_URL
 EOF
 
-pnpm install
-
-pnpm run build || error_exit "前端构建失败"
+if [ "${SKIP_FRONTEND_BUILD}" != "true" ]; then
+    pnpm install
+    pnpm run build || error_exit "前端构建失败"
+else
+    log "跳过前端构建,使用预编译文件"
+    [ ! -d ".next" ] && error_exit "未找到预编译的 .next 目录,请先在本地构建或设置 SKIP_FRONTEND_BUILD=false"
+fi
 
 cat > ecosystem.config.js <<EOF
 module.exports = {
