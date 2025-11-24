@@ -108,7 +108,14 @@ if [ ${#PACKAGES[@]} -gt 0 ]; then
 fi
 
 command -v psql &> /dev/null && sudo systemctl start postgresql && sudo systemctl enable postgresql
-command -v redis-server &> /dev/null && sudo systemctl start redis && sudo systemctl enable redis
+
+if command -v redis-server &> /dev/null; then
+    if systemctl list-unit-files | grep -q "redis-server.service"; then
+        sudo systemctl start redis-server && sudo systemctl enable redis-server
+    elif systemctl list-unit-files | grep -q "redis.service"; then
+        sudo systemctl start redis && sudo systemctl enable redis
+    fi
+fi
 
 if ! command -v node &> /dev/null; then
     case $PKG_MGR in
