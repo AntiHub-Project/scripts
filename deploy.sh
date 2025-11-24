@@ -107,13 +107,22 @@ if [ ${#PACKAGES[@]} -gt 0 ]; then
     esac
 fi
 
-command -v psql &> /dev/null && sudo systemctl start postgresql && sudo systemctl enable postgresql
+if command -v psql &> /dev/null; then
+    sudo systemctl is-active --quiet postgresql || sudo systemctl start postgresql
+    sudo systemctl is-enabled --quiet postgresql || sudo systemctl enable postgresql 2>/dev/null || true
+fi
 
 if command -v redis-server &> /dev/null; then
+    REDIS_SERVICE=""
     if systemctl list-unit-files | grep -q "redis-server.service"; then
-        sudo systemctl start redis-server && sudo systemctl enable redis-server
+        REDIS_SERVICE="redis-server"
     elif systemctl list-unit-files | grep -q "redis.service"; then
-        sudo systemctl start redis && sudo systemctl enable redis
+        REDIS_SERVICE="redis"
+    fi
+    
+    if [ -n "$REDIS_SERVICE" ]; then
+        sudo systemctl is-active --quiet $REDIS_SERVICE || sudo systemctl start $REDIS_SERVICE
+        sudo systemctl is-enabled --quiet $REDIS_SERVICE || sudo systemctl enable $REDIS_SERVICE 2>/dev/null || true
     fi
 fi
 
