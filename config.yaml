@@ -6,12 +6,12 @@ backend:
   # Linux.do OAuth
   oauth_client_id: your-oauth-client-id 
   oauth_client_secret: your-oauth-client-secret
-  oauth_redirect_uri: http://localhost:3000/api/auth/callback # 生产环境请将 http://localhost:3000 替换为你的前端域名
+  oauth_redirect_uri: http://localhost:3000/api/auth/callback # 必须将 http://localhost:3000 替换为https://你的前端域名，否则无法登录
   
   # GitHub OAuth
   github_client_id: your-github-client-id
   github_client_secret: your-github-client-secret
-  github_redirect_uri: http://localhost:3000/api/auth/github/callback # 生产环境请将 http://localhost:3000 替换为你的前端域名
+  github_redirect_uri: http://localhost:3000/api/auth/github/callback # 必须将 http://localhost:3000 替换为https://你的前端域名，否则无法登录
 
 # 插件配置
 plugin:
@@ -23,8 +23,8 @@ plugin:
 # 前端配置
 frontend:
   port: 3000
-  api_url: http://localhost:8000 # 生产环境请将 http://localhost:8000 替换为你的后端域名
-  frontend_url: http://localhost:3000 # 生产环境请将 http://localhost:3000 替换为你的前端域名
+  api_url: http://localhost:8000 # 必须替换为https://你的后端域名，否则无法登录
+  frontend_url: http://localhost:3000 # 必须替换为https://你的前端域名，否则无法登录
 
 redis:
-  url: redis://localhost:6379/0
+  url: redis://localhost:6379/0 # 无需修改
