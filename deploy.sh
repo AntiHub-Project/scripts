@@ -112,14 +112,10 @@ if command -v psql &> /dev/null; then
     sudo systemctl is-enabled --quiet postgresql || sudo systemctl enable postgresql 2>/dev/null || true
 fi
 
-
-check(){
-    if command -v redis-server &> /dev/null; then
-        sudo systemctl is-active --quiet redis-server || sudo systemctl start redis-server
-        sudo systemctl is-enabled --quiet redis-server || sudo systemctl enable redis-server 2>/dev/null || true
-    fi
-}
-
+if command -v redis-server &> /dev/null; then
+    sudo systemctl is-active --quiet redis-server || sudo systemctl start redis-server
+    sudo systemctl is-enabled --quiet redis-server || sudo systemctl enable redis-server 2>/dev/null || true
+fi
 
 if ! command -v node &> /dev/null; then
     case $PKG_MGR in
