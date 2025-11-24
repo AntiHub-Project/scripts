@@ -18,7 +18,7 @@ git clone https://github.com/AntiHub-Project/scripts.git && cd scripts
 
 ### Linux.do 登录配置
 
-> 请务必提前完成反向代理及https配置反向代理及SSL配置，并将下面的 `http://$SERVER_IP:$PORT` 都替换为 `https://你的域名`.
+> 请务必提前完成反向代理及及SSL配置，并将下面的 `http://$SERVER_IP:$PORT` 都替换为 `https://你的域名`.
 
 - 登录 [Linux.do Connect](https://connect.linux.do/dash/sso), 点击 `申请新接入` , 填入应用名, 应用主页 (http://$SERVER_IP:3000), 应用描述及回调地址 ( http://$SERVER_IP:3000/api/auth/callback), 点击保存. 
 
