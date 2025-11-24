@@ -3,6 +3,8 @@
 set -e
 export PATH="$HOME/.local/bin:$PATH"
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -150,6 +152,7 @@ NPM_PACKAGES=()
 [ ! -d "Backend" ] && git clone -q https://github.com/AntiHub-Project/Backend.git
 [ ! -d "Antigv-plugin" ] && git clone -q https://github.com/AntiHub-Project/Antigv-plugin.git
 
+cd /tmp
 sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = '$DB_NAME'" | grep -q 1 || \
     sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;"
 
@@ -167,6 +170,7 @@ sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname = '$PLUGIN_DB_US
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $PLUGIN_DB_NAME TO $PLUGIN_DB_USER;"
 
 PG_HBA=$(sudo -u postgres psql -t -c "SHOW hba_file;" | xargs)
+cd - > /dev/null
 if [ -f "$PG_HBA" ]; then
     grep -q "host.*$DB_NAME.*$DB_USER.*md5" "$PG_HBA" || \
         echo "host    $DB_NAME    $DB_USER    127.0.0.1/32    md5" | sudo tee -a "$PG_HBA"
@@ -175,7 +179,7 @@ if [ -f "$PG_HBA" ]; then
     sudo systemctl reload postgresql
 fi
 
-cd Antigv-plugin
+cd "$SCRIPT_DIR/Antigv-plugin"
 
 [ "$PLUGIN_ADMIN_KEY" == "auto_generate" ] || [ -z "$PLUGIN_ADMIN_KEY" ] && PLUGIN_ADMIN_KEY="sk-admin-$(openssl rand -hex 32)"
 cat > config.json <<EOF
@@ -225,7 +229,7 @@ pm2 delete antigv-plugin || true
 pm2 start src/server/index.js --name antigv-plugin
 pm2 save
 
-cd ../Backend
+cd "$SCRIPT_DIR/Backend"
 
 [ "$JWT_SECRET" == "auto_generate" ] || [ -z "$JWT_SECRET" ] && JWT_SECRET=$(openssl rand -hex 32)
 
@@ -276,7 +280,7 @@ pm2 delete antihub-backend || true
 pm2 start "uv run uvicorn app.main:app --host 0.0.0.0 --port $BACKEND_PORT" --name antihub-backend
 pm2 save
 
-cd ../AntiHub
+cd "$SCRIPT_DIR/AntiHub"
 
 cat > .env <<EOF
 NEXT_PUBLIC_API_URL=$FRONTEND_API_URL
@@ -316,7 +320,7 @@ pm2 delete antihub-frontend || true
 pm2 start ecosystem.config.js
 pm2 save
 
-cd ..
+cd "$SCRIPT_DIR"
 
 command -v systemctl &>/dev/null && pm2 startup systemd -u $(whoami) --hp $(eval echo ~$(whoami)) || true
 
