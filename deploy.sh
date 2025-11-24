@@ -143,6 +143,8 @@ if ! command -v uv &> /dev/null; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
+npm config set registry https://registry.npmjs.org/
+
 NPM_PACKAGES=()
 ! command -v pnpm &> /dev/null && NPM_PACKAGES+=("pnpm")
 ! command -v pm2 &> /dev/null && NPM_PACKAGES+=("pm2")
