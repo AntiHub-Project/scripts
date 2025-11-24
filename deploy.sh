@@ -301,7 +301,7 @@ cat > ecosystem.config.js <<EOF
 module.exports = {
   apps: [{
     name: 'antihub-frontend',
-    script: 'node_modules/.bin/next',
+    script: 'pnpm',
     args: 'start',
     cwd: '$(pwd)',
     instances: 1,
