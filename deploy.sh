@@ -30,6 +30,10 @@ if ! command -v yq &> /dev/null; then
     sudo mv /tmp/yq /usr/local/bin/yq || mv /tmp/yq ~/.local/bin/yq
 fi
 
+SERVER_IP=$(curl -s ip.sb)
+[ -z "$SERVER_IP" ] && SERVER_IP=$(hostname -I | awk '{print $1}')
+[ -z "$SERVER_IP" ] && SERVER_IP="localhost"
+
 DB_HOST="localhost"
 DB_PORT="5432"
 DB_NAME="antihub_db"
@@ -46,10 +50,10 @@ BACKEND_PORT=$(yq eval '.backend.port' config.yaml)
 JWT_SECRET=$(yq eval '.backend.jwt_secret' config.yaml)
 OAUTH_CLIENT_ID=$(yq eval '.backend.oauth_client_id' config.yaml)
 OAUTH_CLIENT_SECRET=$(yq eval '.backend.oauth_client_secret' config.yaml)
-OAUTH_REDIRECT_URI=$(yq eval '.backend.oauth_redirect_uri' config.yaml)
+OAUTH_REDIRECT_URI=$(yq eval '.backend.oauth_redirect_uri' config.yaml | sed "s/localhost/$SERVER_IP/g")
 GITHUB_CLIENT_ID=$(yq eval '.backend.github_client_id' config.yaml)
 GITHUB_CLIENT_SECRET=$(yq eval '.backend.github_client_secret' config.yaml)
-GITHUB_REDIRECT_URI=$(yq eval '.backend.github_redirect_uri' config.yaml)
+GITHUB_REDIRECT_URI=$(yq eval '.backend.github_redirect_uri' config.yaml | sed "s/localhost/$SERVER_IP/g")
 
 PLUGIN_PORT=$(yq eval '.plugin.port' config.yaml)
 PLUGIN_HOST=$(yq eval '.plugin.host' config.yaml)
@@ -57,8 +61,8 @@ PLUGIN_ADMIN_KEY=$(yq eval '.plugin.admin_api_key' config.yaml)
 PLUGIN_ENCRYPTION_KEY=$(yq eval '.plugin.encryption_key' config.yaml)
 
 FRONTEND_PORT=$(yq eval '.frontend.port' config.yaml)
-FRONTEND_API_URL=$(yq eval '.frontend.api_url' config.yaml)
-FRONTEND_URL=$(yq eval '.frontend.frontend_url' config.yaml)
+FRONTEND_API_URL=$(yq eval '.frontend.api_url' config.yaml | sed "s/localhost/$SERVER_IP/g")
+FRONTEND_URL=$(yq eval '.frontend.frontend_url' config.yaml | sed "s/localhost/$SERVER_IP/g")
 
 REDIS_URL=$(yq eval '.redis.url' config.yaml)
 
@@ -308,10 +312,6 @@ pm2 save
 cd ..
 
 command -v systemctl &>/dev/null && pm2 startup systemd -u $(whoami) --hp $(eval echo ~$(whoami)) || true
-
-SERVER_IP=$(hostname -I | awk '{print $1}')
-[ -z "$SERVER_IP" ] && SERVER_IP=$(ip route get 1 | awk '{print $7;exit}')
-[ -z "$SERVER_IP" ] && SERVER_IP="localhost"
 
 echo ""
 log "部署完成"
