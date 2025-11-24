@@ -1,0 +1,30 @@
+# 后端配置
+backend:
+  port: 8000
+  jwt_secret: auto_generate # 此处无需修改，下同
+  
+  # Linux.do OAuth
+  oauth_client_id: your-oauth-client-id 
+  oauth_client_secret: your-oauth-client-secret
+  oauth_redirect_uri: http://localhost:3000/api/auth/sso/callback # 生产环境请将 http://localhost:3000 替换为你的前端域名
+  
+  # GitHub OAuth
+  github_client_id: your-github-client-id
+  github_client_secret: your-github-client-secret
+  github_redirect_uri: http://localhost:3000/api/auth/github/callback # 生产环境请将 http://localhost:3000 替换为你的前端域名
+
+# 插件配置
+plugin:
+  port: 8045 # 请勿修改此
+  host: 127.0.0.1 # 请勿修改此
+  admin_api_key: auto_generate
+  encryption_key: auto_generate
+
+# 前端配置
+frontend:
+  port: 3000
+  api_url: http://localhost:8000 # 生产环境请将 http://localhost:8000 替换为你的后端域名
+  frontend_url: http://localhost:3000 # 生产环境请将 http://localhost:3000 替换为你的前端域名
+
+redis:
+  url: redis://localhost:6379/0
