@@ -10,13 +10,15 @@
 
 请找一台全新安装的服务器, 登录后克隆仓库: 
 
+请至少使用4核心以上的服务器进行部署, 否则编译前端代码可能会导致服务器宕机. 
+
 ```bash
 git clone https://github.com/AntiHub-Project/scripts.git && cd scripts
 ```
 
 ### Linux.do 登录配置
 
-> 如果你反向代理配置了自己的域名, 那么下面的 `http://$SERVER_IP:$PORT` 都替换为你的域名.
+> 请务必提前完成反向代理及https配置反向代理及SSL配置，并将下面的 `http://$SERVER_IP:$PORT` 都替换为 `https://你的域名`.
 
 - 登录 [Linux.do Connect](https://connect.linux.do/dash/sso), 点击 `申请新接入` , 填入应用名, 应用主页 (http://$SERVER_IP:3000), 应用描述及回调地址 ( http://$SERVER_IP:3000/api/auth/callback), 点击保存. 
 
@@ -45,3 +47,5 @@ chmod +x deploy.sh && ./deploy.sh
 ```
 
 部署完成如果你无法访问面板, 请转到云厂商处将对应端口打开. 本说明文档已经足够详细, 如果仍有问题, 请善用AI. 
+
+后续如果修改前端代码或配置, 均需要重新编译, 然后到pm2重启服务; 后端和插件亦是如此, 但只需重启服务即可. 
